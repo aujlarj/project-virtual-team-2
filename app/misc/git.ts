@@ -103,7 +103,6 @@ function stage() {
       if (filesToStage.length > 0) {
         console.log("staging files");
         stagedFiles = index.addAll(filesToStage);
-        clearModifiedFilesList();
       } else {
         //If no files checked, then throw error to stop empty commits
         throw new Error("No files selected to commit.");
@@ -388,10 +387,10 @@ function pullFromRemote() {
 }
 
 function pushToRemote() {
-  if (modifiedFiles.length > 0) {
-    updateModalText("Nothing to push, commit first then push.");
-    return;
-  }
+  // if (modifiedFiles.length > 0) {
+  //   updateModalText("Nothing to push, commit first then push.");
+  //   return;
+  // }
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)
     .then(function (repo) {
@@ -418,6 +417,8 @@ function pushToRemote() {
               );
             })
             .then(function () {
+              commitMessage = document.getElementById('commit-message-input').value;
+              commitMessage = ""
               CommitButNoPush = 0;
               window.onbeforeunload = Confirmed;
               console.log("Push successful");
