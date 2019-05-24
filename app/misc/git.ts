@@ -386,6 +386,10 @@ function pullFromRemote() {
 }
 
 function pushToRemote() {
+  if (modifiedFiles.length > 0) {
+    updateModalText("Nothing to push, commit first then push.");
+    return;
+  }
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)
     .then(function (repo) {

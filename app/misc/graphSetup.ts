@@ -276,8 +276,13 @@ function drawGraph() {
     
         
           network.on("click", function (params) {
-              GraphNodeID = parseInt(params.nodes.toString());
-              console.log("Graph Node ID is: " + GraphNodeID);
+              if (isNaN(GraphNodeID)){
+                  console.log("Graph node ID is NAN");
+              } else {
+                  GraphNodeID = parseInt(params.nodes.toString());
+                  console.log("Graph Node ID is: " + GraphNodeID);
+              }
+
           });
     })
 }
