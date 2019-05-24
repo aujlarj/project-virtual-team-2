@@ -103,6 +103,7 @@ function stage() {
       if (filesToStage.length > 0) {
         console.log("staging files");
         stagedFiles = index.addAll(filesToStage);
+        clearModifiedFilesList();
       } else {
         //If no files checked, then throw error to stop empty commits
         throw new Error("No files selected to commit.");
@@ -209,6 +210,7 @@ function addAndCommit() {
         addCommand("git add " + filesToAdd[i]);
       }
       addCommand('git commit -m "' + commitMessage + '"');
+      clearModifiedFilesList();
       refreshAll(repository);
     }, function (err) {
       console.log("git.ts, line 112, could not commit, " + err);
@@ -394,7 +396,7 @@ function pushToRemote() {
   Git.Repository.open(repoFullPath)
     .then(function (repo) {
       if (commitMessage == null || commitMessage == "") {
-        window.alert("Cannot commit without a commit message. Please add a commit message before committing");
+        window.alert("Cannot push without a commit. Please add a commit message before pushing");
       return;
       }
       console.log("Pushing changes to remote")
