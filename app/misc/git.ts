@@ -387,13 +387,10 @@ function pullFromRemote() {
 }
 
 function pushToRemote() {
-  // if (modifiedFiles.length > 0) {
-  //   updateModalText("Nothing to push, commit first then push.");
-  //   return;
-  // }
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)
     .then(function (repo) {
+      // check if the commit message exist before push, if no message, window alert and return.
       if (commitMessage == null || commitMessage == "") {
         window.alert("Cannot push without a commit. Please add a commit message before pushing");
       return;
@@ -418,6 +415,7 @@ function pushToRemote() {
             })
             .then(function () {
               commitMessage = document.getElementById('commit-message-input').value;
+              //reset the commit message after push is successful.
               commitMessage = ""
               CommitButNoPush = 0;
               window.onbeforeunload = Confirmed;
