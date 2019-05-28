@@ -58,7 +58,7 @@ function sortedListOfCommits(commits){
       }
     }
   }
-  
+
 }
 
 function cloneFromRemote() {
@@ -375,7 +375,7 @@ function pullFromRemote() {
       if (conflicsExist) {
         let conflictedFiles = tid.split("Conflicts:")[1];
         refreshAll(repository);
-       
+
         window.alert("Conflicts exists! Please check the following files:" + conflictedFiles +
          "\n Solve conflicts before you commit again!");
       } else {
@@ -389,6 +389,11 @@ function pushToRemote() {
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)
     .then(function (repo) {
+      //check the commit message, if no commit message, then cannot push
+      if (commitMessage == null || commitMessage == "") {
+        window.alert("Cannot push without a commit message. Please add a commit message before pushing");
+      return;
+      }
       console.log("Pushing changes to remote")
       displayModal("Pushing changes to remote...");
       addCommand("git push -u origin " + branch);
@@ -408,6 +413,9 @@ function pushToRemote() {
               );
             })
             .then(function () {
+              //reset the commit message to none
+              commitMessage = document.getElementById('commit-message-input').value;
+              commitMessage = "";
               CommitButNoPush = 0;
               window.onbeforeunload = Confirmed;
               console.log("Push successful");
@@ -738,7 +746,7 @@ function revertCommit() {
     sortedListOfCommits(Commits);
      console.log("Commits; "+ commitHistory[0]);
     })
-    
+
     Git.Repository.open(repoFullPath)
     .then(function(repo){
       repos = repo;
@@ -755,7 +763,7 @@ function revertCommit() {
     if(commitHistory[index].parents().length > 1) {
       revertOptions.mainline = 1;
     }
-    
+
     revertOptions.mergeInMenu = 1;
     return Git.Revert.revert(repos, commitHistory[index],revertOptions)
     .then(function(number) {
@@ -816,7 +824,7 @@ function displayModifiedFiles() {
         }
 
         modifiedFiles.forEach(displayModifiedFile);
-        
+
         removeNonExistingFiles();
         refreshColor();
 
@@ -1261,7 +1269,7 @@ function cleanRepo() {
 }
 
 /**
- * This method is called when the sync button is pressed, and causes the fetch-modal 
+ * This method is called when the sync button is pressed, and causes the fetch-modal
  * to appear on the screen.
  */
 function requestLinkModal() {
@@ -1269,7 +1277,7 @@ function requestLinkModal() {
 }
 
 /**
- * This method is called when a valid URL is given via the fetch-modal, and runs the 
+ * This method is called when a valid URL is given via the fetch-modal, and runs the
  * series of git commands which fetch and merge from an upstream repository.
  */
 function fetchFromOrigin() {
